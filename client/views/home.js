@@ -21,12 +21,19 @@ Template.home.rendered = function() {
         google.maps.event.addListener(map, 'click', function(e) {
             console.log(e.latLng.D);
             console.log(e.latLng.k);
-            var marker = new google.maps.Marker({
+            var marker = {
                 position: {
                     lat: e.latLng.k,
                     lng: e.latLng.D
-                },
-                map: map
+                }
+            };
+            Meteor.call('createMarker', marker, function(error, newMarker) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    var mapMarker = new google.maps.Marker(newMarker);
+                    mapMarker.setMap(map);
+                }
             })
         })
     });
